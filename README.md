@@ -19,7 +19,7 @@ Circle-Ci (Login require) https://circleci.com/gh/BlueLightJapan/BlueLight/ <br>
 Download Package : https://github.com/BlueLightJapan/BinaryPackforWindows<br>
 <br>
 <a name="JPN"></a>
-BlueLightはMinecraft: Pocket Editionサーバーソフトウェアです<br>
+BlueLightはMinecraft: Pocket Edition用サーバーソフトウェアです<br>
 このソフトウェアは **[PocketMine-MP](http://github.com/PocketMine/PocketMine-MP)** を基につくられています<br>
 大半のコードは **PocketMine Team** によって書かれています<br>
 一部のコードはGenisysから引用しており、 **iTXTech** によって書かれています<br>
@@ -32,4 +32,4 @@ PHP7のbin https://twitter.com/haniokasai<br>
 Pharをダウンロード : Jenkins http://jenkins.haniokasai.com/job/BlueLight-PMMP/<br>
 Circle-Ci (Login require) https://circleci.com/gh/BlueLightJapan/BlueLight/<br>
 便利な詰め合わせ : https://github.com/BlueLightJapan/BinaryPackforWindows<br>
-Lobi : https://web.lobi.co/game/minecraftpe/group/d95ef7462b185454741ad90520e4ba23fe7738c4<br>
+Lobiグループ : https://web.lobi.co/game/minecraftpe/group/d95ef7462b185454741ad90520e4ba23fe7738c4<br>
