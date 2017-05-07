@@ -55,6 +55,8 @@ class Effect{
 	const ABSORPTION = 22; // TODO implement
 	const SATURATION = 23;
 
+	const MAX_DURATION = 2147483648;
+
 	/** @var Effect[] */
 	protected static $effects;
 
@@ -138,7 +140,7 @@ class Effect{
 	}
 
 	public function setDuration($ticks){
-		$this->duration = $ticks;
+		$this->duration = (($ticks > self::MAX_DURATION) ? self::MAX_DURATION : $ticks);
 		return $this;
 	}
 
@@ -198,6 +200,7 @@ class Effect{
 				}
 				return true;
 			case Effect::REGENERATION:
+			case Effect::HUNGER:
 				if(($interval = (40 >> $this->amplifier)) > 0){
 					return ($this->duration % $interval) === 0;
 				}
@@ -221,8 +224,12 @@ class Effect{
 		switch($this->id){
 			case Effect::POISON:
 				if($entity->getHealth() > 1){
-					$ev = new EntityDamageEvent($entity, EntityDamageEvent::CAUSE_MAGIC, 1);
-					$entity->attack($ev->getFinalDamage(), $ev);
+					if($entity instanceof Player){
+						if($entity->isSurvival()){
+							$ev = new EntityDamageEvent($entity, EntityDamageEvent::CAUSE_MAGIC, 1);
+							$entity->attack($ev->getFinalDamage(), $ev);
+						}
+					}
 				}
 				break;
 
@@ -251,6 +258,22 @@ class Effect{
 				if($entity instanceof Human){
 					$entity->exhaust(0.5 * $this->amplifier, PlayerExhaustEvent::CAUSE_POTION);
 				}
+
+				if($entity instanceof Player){
+					if($entity->getServer()->foodEnabled){
+						$entity->setFood($entity->getFood() - 1);
+					}
+				}
+				break;
+
+			case Effect::SATURATION:
+				if($entity instanceof Player){
+					if($entity->getServer()->foodEnabled) {
+						$entity->setFood($entity->getFood() + 1);
+					}
+				}
+				break;
+
 		}
 	}
 
@@ -265,7 +288,7 @@ class Effect{
 	public function add(Entity $entity, $modify = false, Effect $oldEffect = null){
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
-			$pk->eid = 0;
+			$pk->eid = $entity->getId();
 			$pk->effectId = $this->getId();
 			$pk->amplifier = $this->getAmplifier();
 			$pk->particles = $this->isVisible();
@@ -306,7 +329,7 @@ class Effect{
 	public function remove(Entity $entity){
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
-			$pk->eid = 0;
+			$pk->eid = $entity->getId();
 			$pk->eventId = MobEffectPacket::EVENT_REMOVE;
 			$pk->effectId = $this->getId();
 

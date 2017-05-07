@@ -26,7 +26,7 @@ class MapInfoRequestPacket extends DataPacket{
 	public $mapid;
 
 	public function decode(){
-		$this->mapid = $this->getLong();
+		$this->mapid = $this->getVarInt();
 	}
 
 	public function encode(){

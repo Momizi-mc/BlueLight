@@ -24,22 +24,24 @@
  */
 namespace pocketmine\event\level;
 
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\Level;
+use pocketmine\level\format\Chunk;
 
 abstract class ChunkEvent extends LevelEvent{
-	/** @var FullChunk */
+	/** @var Chunk */
 	private $chunk;
 
 	/**
-	 * @param FullChunk $chunk
+ 	 * @param Level $level
+	 * @param Chunk $chunk
 	 */
-	public function __construct(FullChunk $chunk){
-		parent::__construct($chunk->getProvider()->getLevel());
-		$this->chunk = $chunk;
+	public function __construct(Level $level, Chunk $chunk){
+		parent::__construct($level);
+ 		$this->chunk = $chunk;
 	}
 
 	/**
-	 * @return FullChunk
+	 * @return Chunk
 	 */
 	public function getChunk(){
 		return $this->chunk;

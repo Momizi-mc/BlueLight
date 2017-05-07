@@ -23,6 +23,7 @@ namespace pocketmine\command\defaults;
 
 use pocketmine\command\CommandSender;
 use pocketmine\event\TranslationContainer;
+use pocketmine\command\data\CommandParameter;
 
 class BanListCommand extends VanillaCommand{
 
@@ -39,7 +40,7 @@ class BanListCommand extends VanillaCommand{
 		if(!$this->testPermission($sender)){
 			return true;
 		}
-		$list = $sender->getServer()->getNameBans();
+
 		if(isset($args[0])){
 			$args[0] = strtolower($args[0]);
 			if($args[0] === "ips"){

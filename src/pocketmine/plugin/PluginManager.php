@@ -33,7 +33,6 @@ use pocketmine\event\TimingsHandler;
 use pocketmine\permission\Permissible;
 use pocketmine\permission\Permission;
 use pocketmine\Server;
-use pocketmine\utils\PluginException;
 
 /**
  * Manages all the plugins, Permissions and Permissibles
@@ -116,7 +115,7 @@ class PluginManager{
 	/**
 	 * @param string $loaderName A PluginLoader class name
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function registerInterface($loaderName){
 		if(is_subclass_of($loaderName, PluginLoader::class)){
@@ -214,20 +213,16 @@ class PluginManager{
 							$compatible = false;
 							//Check multiple dependencies
 							foreach($description->getCompatibleApis() as $version){
-								//Format: majorVersion.minorVersion.patch
-								$version = array_map("intval", explode(".", $version));
-								$apiVersion = array_map("intval", explode(".", $this->server->getApiVersion()));
-								//Completely different API version
-								if($version[0] !== $apiVersion[0]){
-									continue;
-								}
-								//If the plugin requires new API features, being backwards compatible
-								if($version[1] > $apiVersion[1]){
-									continue;
-								}
+								//Format: majorVersion.minorVersion.patch (3.0.0)
+								//    or: majorVersion.minorVersion.patch-devBuild (3.0.0-alpha1)
 
 								$compatible = true;
 								break;
+							}
+
+							if($compatible === false){
+								$this->server->getLogger()->error($this->server->getLanguage()->translateString("pocketmine.plugin.loadError", [$name, "%pocketmine.plugin.incompatibleAPI"]));
+								continue;
 							}
 
 							$plugins[$name] = $file;
@@ -367,7 +362,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean $op
+	 * @param bool $op
 	 *
 	 * @return Permission[]
 	 */
@@ -408,7 +403,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean $op
+	 * @param bool $op
 	 */
 	private function dirtyPermissibles($op){
 		foreach($this->getDefaultPermSubscriptions($op) as $p){
@@ -466,7 +461,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean     $op
+	 * @param bool        $op
 	 * @param Permissible $permissible
 	 */
 	public function subscribeToDefaultPerms($op, Permissible $permissible){
@@ -478,7 +473,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean     $op
+	 * @param bool        $op
 	 * @param Permissible $permissible
 	 */
 	public function unsubscribeFromDefaultPerms($op, Permissible $permissible){
@@ -490,7 +485,7 @@ class PluginManager{
 	}
 
 	/**
-	 * @param boolean $op
+	 * @param bool $op
 	 *
 	 * @return Permissible[]
 	 */

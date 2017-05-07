@@ -23,7 +23,7 @@ namespace pocketmine\entity;
 
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\network\protocol\AddEntityPacket;
-use pocketmine\level\format\FullChunk;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 
@@ -40,16 +40,17 @@ class Ocelot extends Animal{
 	public $width = 0.312;
 	public $length = 2.188;
 	public $height = 0.75;
+	public $maxhealth = 10;
 	
 	public function getName() : string{
 		return "Ocelot";
 	}
 
-	public function __construct(FullChunk $chunk, CompoundTag $nbt){
+	public function __construct(Level $level, CompoundTag $nbt){
 		if(!isset($nbt->CatType)){
 			$nbt->CatType = new ByteTag("CatType", mt_rand(0, 3));
 		}
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 
 		$this->setDataProperty(self::DATA_CAT_TYPE, self::DATA_TYPE_BYTE, $this->getCatType());
 	}
